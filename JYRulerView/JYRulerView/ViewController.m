@@ -23,16 +23,16 @@
     
     NSString *currentValue = @"100";
     
-    self.valueLb = [[UILabel alloc] initWithFrame:CGRectMake(20, 120, CGRectGetWidth(self.view.frame) - 40, 30)];
+    self.valueLb = [[UILabel alloc] initWithFrame:CGRectMake(20, 110, CGRectGetWidth(self.view.frame) - 40, 30)];
     self.valueLb.text = currentValue;
     self.valueLb.textColor = [UIColor redColor];
-    self.valueLb.font = [UIFont systemFontOfSize:14];
+    self.valueLb.font = [UIFont systemFontOfSize:18];
     self.valueLb.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.valueLb];
     
-    self.rulerView = [[RulerView alloc] initWithFrame:CGRectMake(20, 150, CGRectGetWidth(self.view.frame) - 40, 100)];
+    self.rulerView = [[RulerView alloc] initWithFrame:CGRectMake(20, 150, CGRectGetWidth(self.view.frame) - 40, 90)];
     
-    [self.rulerView rulerViewWithMaxValue:300 minValue:10 average:1 currentValue:[currentValue floatValue] smallMode:YES];
+    [self.rulerView rulerViewWithMaxValue:300 minValue:10 average:1 currentValue:[currentValue floatValue]];
     self.rulerView.backgroundColor = HexRGB(0xECECEC);
     self.rulerView.layer.cornerRadius = 5.f;
     self.rulerView.rulerDeletate = self;

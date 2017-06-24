@@ -11,8 +11,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-
 @class RulerDrawScrollView;
 @protocol RulerViewDelegate <NSObject>
 
@@ -23,8 +21,6 @@
 @interface RulerView : UIView
 
 @property (nonatomic, weak) id<RulerViewDelegate>rulerDeletate;
-
-//@property (nonatomic, assign) CGFloat rulerViewValue;
 
 
 /**
@@ -38,8 +34,7 @@
 - (void)rulerViewWithMaxValue:(CGFloat)maxValue
                      minValue:(CGFloat)minValue
                       average:(CGFloat)average
-                 currentValue:(CGFloat)currentValue
-                    smallMode:(BOOL)mode;
+                 currentValue:(CGFloat)currentValue;
 
 
 @end

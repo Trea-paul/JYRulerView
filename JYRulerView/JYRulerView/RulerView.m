@@ -32,7 +32,6 @@
                      minValue:(CGFloat)minValue
                       average:(CGFloat)average
                  currentValue:(CGFloat)currentValue
-                    smallMode:(BOOL)mode
 {
     NSAssert(self.rulerScrollView != nil, @"***** 调用此方法前，请先调用 initWithFrame:(CGRect)frame 方法初始化对象 rulerScrollView\n");
     NSAssert(currentValue <= maxValue && currentValue >= minValue, @"***** currentValue 需大于最小值minValue且小于最大值maxValue \n");
@@ -40,15 +39,10 @@
     self.rulerScrollView.minValue = minValue;
     self.rulerScrollView.rulerAverage = average;
     self.rulerScrollView.rulerValue = currentValue;
-    self.rulerScrollView.mode = mode;
     self.rulerScrollView.frame = CGRectMake(20, 2, self.rulerScrollView.rulerWidth, self.rulerScrollView.rulerHeight);
     [self.rulerScrollView drawRulerScrollView];
     
     [self drawIndicator];
-    
-    
-    
-    
 }
 
 - (RulerScrollView *)rulerScrollView
@@ -85,23 +79,22 @@
     [self.layer addSublayer:gradient];
     
     // 橙色指示器
-        CAShapeLayer *shapeLayerLine = [CAShapeLayer layer];
-        shapeLayerLine.strokeColor = HexRGB(0xFD9627).CGColor;
-        shapeLayerLine.fillColor = HexRGB(0xFD9627).CGColor;
-        shapeLayerLine.lineWidth = 3.f;
-        shapeLayerLine.lineCap = kCALineCapSquare;
+    CAShapeLayer *shapeLayerLine = [CAShapeLayer layer];
+    shapeLayerLine.strokeColor = HexRGB(0xFD9627).CGColor;
+    shapeLayerLine.fillColor = HexRGB(0xFD9627).CGColor;
+    shapeLayerLine.lineWidth = 3.f;
+    shapeLayerLine.lineCap = kCALineCapSquare;
+
+    CGMutablePathRef pathLine = CGPathCreateMutable();
+    CGPathMoveToPoint(pathLine, NULL, self.frame.size.width / 2, self.frame.size.height + 2);
+    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2, -2);
+    // 三角形
+    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2 - 10 / 2, -8);
+    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2  + 10 / 2, -8);
+    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2 , -2);
     //
-    //    //    NSUInteger ruleHeight = 20; // 文字高度
-        CGMutablePathRef pathLine = CGPathCreateMutable();
-        CGPathMoveToPoint(pathLine, NULL, self.frame.size.width / 2, self.frame.size.height + 2);
-        CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2, - 2);
-    //
-    ////    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2 - SHEIGHT / 2, DISTANCETOPANDBOTTOM);
-    ////    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2 + SHEIGHT / 2, DISTANCETOPANDBOTTOM);
-    ////    CGPathAddLineToPoint(pathLine, NULL, self.frame.size.width / 2, DISTANCETOPANDBOTTOM + SHEIGHT);
-    //
-        shapeLayerLine.path = pathLine;
-        [self.layer addSublayer:shapeLayerLine];
+    shapeLayerLine.path = pathLine;
+    [self.layer addSublayer:shapeLayerLine];
     
     
 }
@@ -110,21 +103,18 @@
 - (void)scrollViewDidScroll:(RulerScrollView *)scrollView {
     
     CGFloat offSetX = scrollView.contentOffset.x + self.frame.size.width / 2;
-    CGFloat ruleValue = (offSetX / kDistanceMargin) * scrollView.rulerAverage;
+    CGFloat ruleValue = (offSetX / kDistanceMargin);
+    
     if (ruleValue < scrollView.minValue) {
         ruleValue = scrollView.minValue;
-        //        return;
+        
     } else if (ruleValue > scrollView.maxValue) {
         ruleValue = scrollView.maxValue;
-        //        return;
+        
     }
     
-    if (self.rulerDeletate) {
-        if (!scrollView.mode) {
-            scrollView.rulerValue = ruleValue;
-        }
-        scrollView.mode = NO;
-        [self.rulerDeletate rulerView:scrollView.rulerValue];
+    if (self.rulerDeletate && [self.rulerDeletate respondsToSelector:@selector(rulerView:)]) {
+        [self.rulerDeletate rulerView:ruleValue];
     }
 }
 

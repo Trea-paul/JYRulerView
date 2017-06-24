@@ -21,8 +21,10 @@
 
 @property (nonatomic, assign) CGFloat rulerValue;
 
-@property (nonatomic, assign) BOOL mode;
 
+/**
+ 绘制刻度尺
+ */
 - (void)drawRulerScrollView;
 
 @end
